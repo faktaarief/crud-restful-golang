@@ -41,6 +41,18 @@ func (server *Server) Initialize(dbDriver, dbUser, dbPass, dbPort, dbHost, dbNam
 		&models.User{},
 		&models.Post{},
 	)
+
+	err = server.DB.Debug().Model(&models.Post{}).AddForeignKey(
+		"author_id",
+		"users(id)",
+		"cascade",
+		"cascade",
+	).Error
+
+	if err != nil {
+		log.Fatalf("Attaching ForeignKey Error: %v", err)
+	}
+
 	server.Router = mux.NewRouter()
 }
 

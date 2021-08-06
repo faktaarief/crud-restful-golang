@@ -28,5 +28,5 @@ func main() {
 	dbName := os.Getenv("DB_NAME")
 
 	server.Initialize(dbDriver, dbUser, dbPass, dbPort, dbHost, dbName)
-	server.Run(":4001")
+	server.Run(":8080")
 }
