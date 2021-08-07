@@ -45,6 +45,7 @@ func (server *Server) Initialize(dbDriver, dbUser, dbPass, dbPort, dbHost, dbNam
 
 	server.AddConstraints()
 	server.Router = mux.NewRouter()
+	server.Routes()
 }
 
 func (server *Server) Run(PORT string) {
