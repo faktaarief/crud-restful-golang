@@ -9,8 +9,6 @@ import (
 	"github.com/jinzhu/gorm"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-
-	"github.com/faktaarief/crud-restful-golang/app/models"
 )
 
 type Server struct {
@@ -37,22 +35,15 @@ func (server *Server) Initialize(dbDriver, dbUser, dbPass, dbPort, dbHost, dbNam
 		}
 	}
 
-	server.DB.Debug().AutoMigrate(
-		&models.User{},
-		&models.Post{},
-	)
+	for _, model := range RegisterModels() {
+		err = server.DB.Debug().AutoMigrate(model.Model).Error
 
-	err = server.DB.Debug().Model(&models.Post{}).AddForeignKey(
-		"author_id",
-		"users(id)",
-		"cascade",
-		"cascade",
-	).Error
-
-	if err != nil {
-		log.Fatalf("Attaching ForeignKey Error: %v", err)
+		if err != nil {
+			log.Fatalf("Model error %v", err)
+		}
 	}
 
+	server.AddConstraints()
 	server.Router = mux.NewRouter()
 }
 
