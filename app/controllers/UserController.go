@@ -1,28 +1,26 @@
 package controllers
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/faktaarief/crud-restful-golang/app/models"
-	"github.com/faktaarief/crud-restful-golang/app/responses"
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
-func CreateUser(res http.ResponseWriter, req *http.Request) {
-	// body, err := ioutil.ReadAll(req.Body)
-
-	// if err != nil {
-	// 	responses.Failed(res, http.StatusUnprocessableEntity, err)
-	// }
-
+func CreateUser(ctx *gin.Context) {
 	user := models.User{}
-
-	err := json.NewDecoder(req.Body).Decode(&user)
-
-	if err != nil {
-		responses.Failed(res, http.StatusUnprocessableEntity, err)
-		return
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
 	}
 
-	json.NewEncoder(res).Encode(user)
+	validate := validator.New()
+
+	if err := validate.Struct(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+	}
 }

@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"net/http"
-
-	"github.com/faktaarief/crud-restful-golang/app/responses"
+	"github.com/gin-gonic/gin"
 )
 
-func Home(res http.ResponseWriter, req *http.Request) {
-	responses.Success(res, http.StatusOK, "This is a Home")
+func Home(ctx *gin.Context) {
+	ctx.JSON(200, gin.H{
+		"message": "Hello World!",
+	})
 }
