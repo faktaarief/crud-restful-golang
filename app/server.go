@@ -45,7 +45,15 @@ func (server *Server) Initialize(dbDriver, dbUser, dbPass, dbPort, dbHost, dbNam
 
 	server.AddConstraints()
 	server.Router = mux.NewRouter()
+	server.Router.Use(commonMiddleware)
 	server.Routes()
+}
+
+func commonMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		res.Header().Add("Content-Type", "application/json")
+		next.ServeHTTP(res, req)
+	})
 }
 
 func (server *Server) Run(PORT string) {
