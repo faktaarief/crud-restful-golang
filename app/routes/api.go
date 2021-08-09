@@ -14,7 +14,11 @@ func Router() {
 	router := gin.Default()
 
 	router.GET("/", controllers.Home)
+	router.GET("/users", controllers.FindAllUsers)
+	router.GET("/users/:id", controllers.FindUserById)
 	router.POST("/users/create", controllers.CreateUser)
+	router.DELETE("/users/:id", controllers.DeleteUserById)
+	router.PUT("/users/:id", controllers.UpdateUserById)
 
 	router.Run(":8080")
 	log.Println("Starting the HTTP Server on Port", PORT)
