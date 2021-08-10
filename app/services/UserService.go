@@ -5,10 +5,10 @@ import (
 	"github.com/faktaarief/crud-restful-golang/app/models"
 )
 
-var user = models.User{}
-
 func CreateUser(objectField *models.User) (*models.User, error) {
+	user := models.User{}
 	err := database.Connector.Create(objectField).Error
+
 	if err != nil {
 		return &models.User{}, err
 	}
@@ -18,8 +18,8 @@ func CreateUser(objectField *models.User) (*models.User, error) {
 
 func FindAllUsers() (*[]models.User, error) {
 	users := []models.User{}
-
 	err := database.Connector.Find(&users).Error
+
 	if err != nil {
 		return &[]models.User{}, err
 	}
@@ -28,7 +28,9 @@ func FindAllUsers() (*[]models.User, error) {
 }
 
 func FindUserById(user_id uint32) (*models.User, error) {
-	err := database.Connector.First(&user, "id = ?", user_id).Error
+	user := models.User{}
+
+	err := database.Connector.First(&user, user_id).Error
 	if err != nil {
 		return &models.User{}, err
 	}
@@ -37,7 +39,9 @@ func FindUserById(user_id uint32) (*models.User, error) {
 }
 
 func DeleteUserById(user_id uint32) (*models.User, error) {
-	err := database.Connector.Delete(&user, "id = ?", user_id).Error
+	user := models.User{}
+	err := database.Connector.First(&user, user_id).Delete(&user, user_id).Error
+
 	if err != nil {
 		return &models.User{}, err
 	}
@@ -46,7 +50,9 @@ func DeleteUserById(user_id uint32) (*models.User, error) {
 }
 
 func UpdateUserById(objectField *models.User, user_id uint32) (*models.User, error) {
-	err := database.Connector.Model(&user).First(&user, "id = ?", user_id).Updates(objectField).Error
+	user := models.User{}
+	err := database.Connector.First(&user, user_id).Updates(&objectField).Error
+
 	if err != nil {
 		return &models.User{}, err
 	}

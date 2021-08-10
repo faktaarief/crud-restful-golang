@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/faktaarief/crud-restful-golang/app/database"
@@ -54,11 +53,4 @@ func initModels() {
 	}
 
 	models.AddConstraints()
-}
-
-func commonMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-		res.Header().Add("Content-Type", "application/json")
-		next.ServeHTTP(res, req)
-	})
 }

@@ -16,6 +16,7 @@ func CreateUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
 
 	validate := validator.New()
@@ -24,6 +25,7 @@ func CreateUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
 
 	_, err := services.CreateUser(&user)
@@ -32,6 +34,7 @@ func CreateUser(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"error": err,
 		})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
@@ -59,9 +62,10 @@ func FindUserById(ctx *gin.Context) {
 	user, err := services.FindUserById(uint32(user_id))
 
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{
 			"error": err,
 		})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
@@ -74,9 +78,10 @@ func DeleteUserById(ctx *gin.Context) {
 	_, err := services.DeleteUserById(uint32(user_id))
 
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{
 			"error": err,
 		})
+		return
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
@@ -90,6 +95,7 @@ func UpdateUserById(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
 
 	validate := validator.New()
@@ -98,13 +104,14 @@ func UpdateUserById(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		return
 	}
 
 	user_id, _ := strconv.ParseUint(ctx.Param("id"), 10, 64)
 	_, err := services.UpdateUserById(&user, uint32(user_id))
 
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{
+		ctx.JSON(http.StatusUnprocessableEntity, gin.H{
 			"error": err,
 		})
 		return
