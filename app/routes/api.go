@@ -13,12 +13,24 @@ func Router() {
 	var PORT = fmt.Sprintf(":%s", os.Getenv("PORT"))
 	router := gin.Default()
 
-	router.GET("/", controllers.Home)
-	router.GET("/users", controllers.FindAllUsers)
-	router.GET("/users/:id", controllers.FindUserById)
-	router.POST("/users/create", controllers.CreateUser)
-	router.DELETE("/users/:id", controllers.DeleteUserById)
-	router.PUT("/users/:id", controllers.UpdateUserById)
+	home := router.Group("/")
+	{
+		home.GET("/", controllers.Home)
+	}
+
+	users := router.Group("/users")
+	{
+		users.GET("/", controllers.FindAllUsers)
+		users.GET("/:id", controllers.FindUserById)
+		users.POST("/create", controllers.CreateUser)
+		users.DELETE("/:id", controllers.DeleteUserById)
+		users.PUT("/:id", controllers.UpdateUserById)
+	}
+
+	posts := router.Group("/posts")
+	{
+		posts.GET("/", controllers.FindAllPosts)
+	}
 
 	router.Run(":8080")
 	log.Println("Starting the HTTP Server on Port", PORT)
