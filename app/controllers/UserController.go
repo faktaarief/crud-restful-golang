@@ -1,11 +1,13 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/faktaarief/crud-restful-golang/app/models"
 	"github.com/faktaarief/crud-restful-golang/app/services"
+	"github.com/faktaarief/crud-restful-golang/app/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )
@@ -28,7 +30,13 @@ func CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	_, err := services.CreateUser(&user)
+	err := utils.BeforeSave(&user)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	_, err = services.CreateUser(&user)
 
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
@@ -107,8 +115,14 @@ func UpdateUserById(ctx *gin.Context) {
 		return
 	}
 
+	err := utils.BeforeSave(&user)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
 	user_id, _ := strconv.ParseUint(ctx.Param("id"), 10, 64)
-	_, err := services.UpdateUserById(&user, uint32(user_id))
+	_, err = services.UpdateUserById(&user, uint32(user_id))
 
 	if err != nil {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{
