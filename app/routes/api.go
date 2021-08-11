@@ -30,6 +30,10 @@ func Router() {
 	posts := router.Group("/posts")
 	{
 		posts.GET("/", controllers.FindAllPosts)
+		posts.GET("/:id", controllers.FindPostById)
+		posts.POST("/", controllers.CreatePost)
+		posts.DELETE("/:id", controllers.DeletePostById)
+		posts.PUT("/:id", controllers.UpdatePostById)
 	}
 
 	router.Run(":8080")

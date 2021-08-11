@@ -30,7 +30,7 @@ func CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	err := utils.BeforeSave(&user)
+	err := utils.BeforeSaveUser(&user)
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -115,7 +115,7 @@ func UpdateUserById(ctx *gin.Context) {
 		return
 	}
 
-	err := utils.BeforeSave(&user)
+	err := utils.BeforeSaveUser(&user)
 	if err != nil {
 		log.Fatal(err)
 		return

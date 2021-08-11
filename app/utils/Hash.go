@@ -9,7 +9,7 @@ func HashPassword(password string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 }
 
-func BeforeSave(objectField *models.User) error {
+func BeforeSaveUser(objectField *models.User) error {
 	hashedPassword, err := HashPassword(objectField.Password)
 
 	if err != nil {
